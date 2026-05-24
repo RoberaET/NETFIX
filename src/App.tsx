@@ -498,7 +498,7 @@ export default function App() {
           {/* Logo */}
           <Link
             to="/"
-            className="font-display-lg text-2xl md:text-3xl font-extrabold text-primary dark:text-primary-fixed-dim tracking-tight flex items-center gap-2 hover:opacity-90 transition-opacity"
+            className="font-display-lg text-2xl md:text-3xl font-extrabold text-primary dark:text-primary-fixed-dim tracking-tight flex items-center gap-2 hover:opacity-90 transition-opacity whitespace-nowrap shrink-0"
           >
             <span className="material-symbols-outlined text-3xl" style={{ fontVariationSettings: "'FILL' 1" }}>settings_ethernet</span>
             NETFIX IT SOLUTION
@@ -604,7 +604,7 @@ export default function App() {
         <div className="max-w-container-max mx-auto px-gutter py-16 grid grid-cols-1 md:grid-cols-12 gap-10">
 
           <div className="md:col-span-4 space-y-4 text-left">
-            <Link to="/" className="font-display-lg text-xl md:text-2xl font-extrabold text-primary dark:text-primary-fixed-dim hover:opacity-95 tracking-tight flex items-center gap-2">
+            <Link to="/" className="font-display-lg text-xl md:text-2xl font-extrabold text-primary dark:text-primary-fixed-dim hover:opacity-95 tracking-tight flex items-center gap-2 whitespace-nowrap shrink-0">
               <span className="material-symbols-outlined text-2xl" style={{ fontVariationSettings: "'FILL' 1" }}>settings_ethernet</span>
               NETFIX IT SOLUTION
             </Link>
