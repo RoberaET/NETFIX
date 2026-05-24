@@ -470,7 +470,7 @@ export default function App() {
 
   const [formSubmitted, setFormSubmitted] = useState(false)
   const [selectedServices, setSelectedServices] = useState<string[]>([])
-  const [formData, setFormData] = useState({ name: '', email: '', service: 'General Query', message: '', budget: '1000' })
+  const [formData, setFormData] = useState({ name: '', email: '', service: 'General Query', message: '', budget: '25000' })
 
   const toggleServiceSelection = (serviceTitle: string) => {
     setSelectedServices(prev =>
@@ -546,7 +546,7 @@ export default function App() {
     setTimeout(() => {
       setIsQuoteModalOpen(false)
       setFormSubmitted(false)
-      setFormData({ name: '', email: '', service: 'General Query', message: '', budget: '1000' })
+      setFormData({ name: '', email: '', service: 'General Query', message: '', budget: '25000' })
       setSelectedServices([])
     }, 2500)
   }
@@ -743,14 +743,14 @@ export default function App() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/60 backdrop-blur-md z-[100] flex items-center justify-center p-4 overflow-y-auto"
+            className="fixed inset-0 bg-black/60 backdrop-blur-md z-[100] flex items-start md:items-center justify-center p-4 overflow-y-auto"
           >
             <motion.div
               initial={{ scale: 0.93, y: 15 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.93, y: 15 }}
               transition={{ type: 'spring', damping: 25, stiffness: 350 }}
-              className="bg-white dark:bg-[#121826] border border-slate-200 dark:border-slate-800/80 rounded-2xl max-w-lg w-full p-8 relative shadow-2xl text-left"
+              className="bg-white dark:bg-[#121826] border border-slate-200 dark:border-slate-800/80 rounded-2xl max-w-lg w-full p-6 md:p-8 my-8 md:my-0 relative shadow-2xl text-left max-h-[90vh] md:max-h-[85vh] flex flex-col overflow-hidden"
             >
               <button onClick={() => setIsQuoteModalOpen(false)} className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 dark:hover:text-white rounded-full hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors" aria-label="Close modal">
                 <span className="material-symbols-outlined">close</span>
@@ -758,15 +758,15 @@ export default function App() {
 
               <AnimatePresence mode="wait">
                 {!formSubmitted ? (
-                  <motion.div key="form" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-6">
-                    <div>
+                  <motion.div key="form" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-4 flex-grow flex flex-col overflow-hidden">
+                    <div className="shrink-0 mb-1 pr-8">
                       <h3 className="font-display-lg text-2xl font-extrabold text-on-surface dark:text-white">Request a Free Quote</h3>
                       <p className="font-body-md text-sm text-on-surface-variant dark:text-gray-400 mt-1">Our engineering team will follow up within 2 hours.</p>
                     </div>
-                    <form onSubmit={handleFormSubmit} className="space-y-4">
+                    <form onSubmit={handleFormSubmit} className="space-y-4 flex-grow overflow-y-auto pr-2">
                       {[
                         { label: 'Your Name', name: 'name', type: 'text', placeholder: 'John Doe' },
-                        { label: 'Corporate Email', name: 'email', type: 'email', placeholder: 'j.doe@company.com' },
+                        { label: 'Corporate Email', name: 'email', type: 'email', placeholder: 'name@company.com' },
                       ].map(f => (
                         <div key={f.name}>
                           <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">{f.label}</label>
@@ -814,9 +814,9 @@ export default function App() {
                       <div>
                         <div className="flex justify-between mb-1">
                           <label className="block text-xs font-bold uppercase tracking-wider text-slate-500">Estimated Budget</label>
-                          <span className="text-sm font-bold text-primary dark:text-primary-fixed-dim">${formData.budget}+</span>
+                          <span className="text-sm font-bold text-primary dark:text-primary-fixed-dim">ETB {Number(formData.budget).toLocaleString()}+</span>
                         </div>
-                        <input type="range" name="budget" min="500" max="25000" step="500" value={formData.budget} onChange={handleFormChange} className="w-full accent-primary" />
+                        <input type="range" name="budget" min="5000" max="500000" step="5000" value={formData.budget} onChange={handleFormChange} className="w-full accent-primary" />
                       </div>
 
                       <div>
