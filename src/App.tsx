@@ -87,6 +87,9 @@ function Home({
   activeTab,
   setActiveTab,
   filteredServices,
+  selectedServices,
+  toggleServiceSelection,
+  setSelectedServices,
 }: {
   setIsQuoteModalOpen: (v: boolean) => void
   setSelectedService: (s: Service) => void
@@ -97,6 +100,9 @@ function Home({
   activeTab: string
   setActiveTab: (t: 'All' | 'Hardware' | 'Operations' | 'Connectivity' | 'Software') => void
   filteredServices: Service[]
+  selectedServices: string[]
+  toggleServiceSelection: (title: string) => void
+  setSelectedServices: React.Dispatch<React.SetStateAction<string[]>>
 }) {
   return (
     <main className="flex-grow">
@@ -230,45 +236,99 @@ function Home({
           {/* Services grid */}
           <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <AnimatePresence mode="popLayout">
-              {filteredServices.map((service, index) => (
-                <motion.div
-                  layout
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ duration: 0.5, delay: index * 0.05 }}
-                  key={service.title}
-                  className="bg-surface-container-lowest dark:bg-[#161c2d] border border-soft-blue-gray/10 dark:border-slate-800/80 rounded-2xl p-6 tech-glow flex flex-col h-full group relative overflow-hidden shadow-sm"
-                >
-                  <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 dark:bg-primary-fixed-dim/5 rounded-bl-full -mr-6 -mt-6 transition-transform group-hover:scale-150 duration-500" />
-
-                  <div className="w-14 h-14 bg-light-gray dark:bg-slate-800 rounded-xl flex items-center justify-center mb-6 text-primary dark:text-primary-fixed-dim group-hover:scale-110 transition-transform duration-300">
-                    <span className="material-symbols-outlined text-3xl" style={{ fontVariationSettings: "'FILL' 1" }}>
-                      {service.icon}
-                    </span>
-                  </div>
-
-                  <h3 className="font-body-lg text-xl font-bold text-on-surface dark:text-white mb-3">{service.title}</h3>
-                  <p className="font-body-md text-sm text-on-surface-variant dark:text-gray-300 mb-6 flex-grow leading-relaxed">{service.desc}</p>
-
-                  <button
-                    onClick={() => setSelectedService(service)}
-                    className="text-left text-primary dark:text-primary-fixed-dim text-sm font-bold flex items-center gap-1 mb-4 hover:underline cursor-pointer group/btn"
+              {filteredServices.map((service, index) => {
+                const isSelected = selectedServices.includes(service.title)
+                return (
+                  <motion.div
+                    layout
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    transition={{ duration: 0.5, delay: index * 0.05 }}
+                    key={service.title}
+                    onClick={() => toggleServiceSelection(service.title)}
+                    className={`bg-surface-container-lowest dark:bg-[#161c2d] border rounded-2xl p-6 tech-glow flex flex-col h-full group relative overflow-hidden shadow-sm cursor-pointer transition-all duration-300 ${
+                      isSelected
+                        ? 'border-primary dark:border-primary-fixed-dim bg-primary/[0.02] dark:bg-primary-fixed-dim/[0.02] shadow-md ring-1 ring-primary/20 dark:ring-primary-fixed-dim/20'
+                        : 'border-soft-blue-gray/10 dark:border-slate-800/80 hover:border-primary/50'
+                    }`}
                   >
-                    Explore features
-                    <span className="material-symbols-outlined text-xs group-hover/btn:translate-x-1 transition-transform">arrow_forward</span>
-                  </button>
+                    {/* Selected Checkmark Badge */}
+                    {isSelected && (
+                      <div className="absolute top-3 right-3 w-6 h-6 rounded-full bg-primary dark:bg-primary-fixed-dim text-on-primary dark:text-on-primary-fixed flex items-center justify-center shadow-sm z-10 animate-in fade-in zoom-in-50 duration-200">
+                        <span className="material-symbols-outlined text-[14px] font-bold">check</span>
+                      </div>
+                    )}
 
-                  <div className="mt-auto pt-2 border-t border-slate-100 dark:border-slate-800/50 flex justify-between items-center">
-                    <span className="inline-block px-3 py-1 bg-primary/10 text-primary dark:bg-primary-fixed-dim/10 dark:text-primary-fixed-dim font-label-sm text-xs font-semibold rounded-full">
-                      {service.tag}
-                    </span>
-                    <span className="text-xs text-slate-400 dark:text-slate-500 font-label-sm">{service.category}</span>
-                  </div>
-                </motion.div>
-              ))}
+                    <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 dark:bg-primary-fixed-dim/5 rounded-bl-full -mr-6 -mt-6 transition-transform group-hover:scale-150 duration-500" />
+
+                    <div className="w-14 h-14 bg-light-gray dark:bg-slate-800 rounded-xl flex items-center justify-center mb-6 text-primary dark:text-primary-fixed-dim group-hover:scale-110 transition-transform duration-300">
+                      <span className="material-symbols-outlined text-3xl" style={{ fontVariationSettings: "'FILL' 1" }}>
+                        {service.icon}
+                      </span>
+                    </div>
+
+                    <h3 className="font-body-lg text-xl font-bold text-on-surface dark:text-white mb-3">{service.title}</h3>
+                    <p className="font-body-md text-sm text-on-surface-variant dark:text-gray-300 mb-6 flex-grow leading-relaxed">{service.desc}</p>
+
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        setSelectedService(service)
+                      }}
+                      className="text-left text-primary dark:text-primary-fixed-dim text-sm font-bold flex items-center gap-1 mb-4 hover:underline cursor-pointer group/btn"
+                    >
+                      Explore features
+                      <span className="material-symbols-outlined text-xs group-hover/btn:translate-x-1 transition-transform">arrow_forward</span>
+                    </button>
+
+                    <div className="mt-auto pt-2 border-t border-slate-100 dark:border-slate-800/50 flex justify-between items-center">
+                      <span className="inline-block px-3 py-1 bg-primary/10 text-primary dark:bg-primary-fixed-dim/10 dark:text-primary-fixed-dim font-label-sm text-xs font-semibold rounded-full">
+                        {service.tag}
+                      </span>
+                      <span className="text-xs text-slate-400 dark:text-slate-500 font-label-sm">{service.category}</span>
+                    </div>
+                  </motion.div>
+                )
+              })}
             </AnimatePresence>
           </motion.div>
+
+          {/* Selected Services Action Banner */}
+          <AnimatePresence>
+            {selectedServices.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
+                className="mt-12 bg-primary/10 dark:bg-primary-fixed-dim/10 border border-primary/20 dark:border-primary-fixed-dim/20 rounded-2xl p-6 flex flex-col md:flex-row items-center justify-between gap-6 max-w-4xl mx-auto"
+              >
+                <div className="text-left">
+                  <h4 className="font-body-lg text-lg font-bold text-on-surface dark:text-white">
+                    You've selected {selectedServices.length} {selectedServices.length === 1 ? 'service' : 'services'}
+                  </h4>
+                  <p className="font-body-md text-sm text-on-surface-variant dark:text-gray-300 mt-1">
+                    {selectedServices.join(', ')}
+                  </p>
+                </div>
+                <div className="flex gap-4 w-full md:w-auto shrink-0">
+                  <button
+                    onClick={() => setSelectedServices([])}
+                    className="px-5 py-2.5 rounded-xl border border-outline-variant text-sm font-bold text-on-surface-variant dark:text-gray-300 hover:bg-surface-container transition-colors cursor-pointer"
+                  >
+                    Clear Selection
+                  </button>
+                  <button
+                    onClick={() => setIsQuoteModalOpen(true)}
+                    className="flex-grow md:flex-grow-0 px-6 py-2.5 rounded-xl bg-primary text-on-primary dark:bg-primary-fixed-dim dark:text-on-primary-fixed font-bold hover:shadow-md transition-all cursor-pointer flex items-center justify-center gap-2"
+                  >
+                    <span className="material-symbols-outlined text-lg">edit_note</span>
+                    Request Quote for Selected
+                  </button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </section>
 
@@ -409,7 +469,16 @@ export default function App() {
   const [selectedService, setSelectedService] = useState<Service | null>(null)
 
   const [formSubmitted, setFormSubmitted] = useState(false)
+  const [selectedServices, setSelectedServices] = useState<string[]>([])
   const [formData, setFormData] = useState({ name: '', email: '', service: 'General Query', message: '', budget: '1000' })
+
+  const toggleServiceSelection = (serviceTitle: string) => {
+    setSelectedServices(prev =>
+      prev.includes(serviceTitle)
+        ? prev.filter(t => t !== serviceTitle)
+        : [...prev, serviceTitle]
+    )
+  }
 
   const [uptime, setUptime] = useState(0)
   const [pings, setPings] = useState<{ id: number; server: string; time: string; ping: number; status: string }[]>([])
@@ -478,6 +547,7 @@ export default function App() {
       setIsQuoteModalOpen(false)
       setFormSubmitted(false)
       setFormData({ name: '', email: '', service: 'General Query', message: '', budget: '1000' })
+      setSelectedServices([])
     }, 2500)
   }
 
@@ -593,6 +663,9 @@ export default function App() {
               activeTab={activeTab}
               setActiveTab={setActiveTab}
               filteredServices={filteredServices}
+              selectedServices={selectedServices}
+              toggleServiceSelection={toggleServiceSelection}
+              setSelectedServices={setSelectedServices}
             />
           }
         />
@@ -708,14 +781,34 @@ export default function App() {
                       ))}
 
                       <div>
-                        <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Select Service</label>
-                        <select name="service" value={formData.service} onChange={handleFormChange} className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-on-surface dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all">
-                          <option>Camera Surveillance Installation</option>
-                          <option>24/7 Managed IT Support</option>
-                          <option>Enterprise Network Deployment</option>
-                          <option>Custom Website/App Development</option>
-                          <option>General IT Consultation</option>
-                        </select>
+                        <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Requested Service(s)</label>
+                        {selectedServices.length > 0 ? (
+                          <div className="flex flex-wrap gap-2 mb-2 p-3 rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
+                            {selectedServices.map(srv => (
+                              <span
+                                key={srv}
+                                className="inline-flex items-center gap-1.5 px-3 py-1 bg-primary/10 text-primary dark:bg-primary-fixed-dim/10 dark:text-primary-fixed-dim font-label-sm text-xs font-bold rounded-lg border border-primary/20 dark:border-primary-fixed-dim/20"
+                              >
+                                {srv}
+                                <button
+                                  type="button"
+                                  onClick={() => toggleServiceSelection(srv)}
+                                  className="hover:bg-primary/20 rounded-full p-0.5 inline-flex items-center justify-center cursor-pointer transition-colors"
+                                >
+                                  <span className="material-symbols-outlined text-[12px] font-bold">close</span>
+                                </button>
+                              </span>
+                            ))}
+                          </div>
+                        ) : (
+                          <select name="service" value={formData.service} onChange={handleFormChange} className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-on-surface dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all">
+                            <option>Camera Surveillance Installation</option>
+                            <option>24/7 Managed IT Support</option>
+                            <option>Enterprise Network Deployment</option>
+                            <option>Custom Website/App Development</option>
+                            <option>General IT Consultation</option>
+                          </select>
+                        )}
                       </div>
 
                       <div>
