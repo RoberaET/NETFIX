@@ -765,7 +765,7 @@ export default function App() {
                     </div>
                     <form onSubmit={handleFormSubmit} className="space-y-4 flex-grow overflow-y-auto pr-2">
                       {[
-                        { label: 'Your Name', name: 'name', type: 'text', placeholder: 'John Doe' },
+                        { label: 'Your Name', name: 'name', type: 'text', placeholder: 'Abebe Kebede' },
                         { label: 'Corporate Email', name: 'email', type: 'email', placeholder: 'name@company.com' },
                       ].map(f => (
                         <div key={f.name}>
