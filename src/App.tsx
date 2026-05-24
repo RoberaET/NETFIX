@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from 'react'
 import { Routes, Route, NavLink, Link } from 'react-router-dom'
 import { motion, AnimatePresence, useInView } from 'framer-motion'
 import About from './About'
+import Services from './Services'
+import Contact from './Contact'
 
 // Define the Service types
 interface Service {
@@ -556,6 +558,8 @@ export default function App() {
   const navLinks = [
     { to: '/', label: 'Home', end: true },
     { to: '/about', label: 'About Us', end: false },
+    { to: '/services', label: 'Services', end: false },
+    { to: '/contact', label: 'Contact', end: false },
   ]
 
   return (
@@ -579,9 +583,6 @@ export default function App() {
             {navLinks.map(l => (
               <NavLink key={l.to} to={l.to} end={l.end} className={navLinkClass}>{l.label}</NavLink>
             ))}
-            <a href="/#services" className="text-on-surface-variant dark:text-gray-300 hover:text-primary dark:hover:text-primary-fixed-dim transition-colors duration-200 font-medium text-sm">Services</a>
-            <a href="/#metrics" className="text-on-surface-variant dark:text-gray-300 hover:text-primary dark:hover:text-primary-fixed-dim transition-colors duration-200 font-medium text-sm">Performance</a>
-            <a href="/#contact-footer" className="text-on-surface-variant dark:text-gray-300 hover:text-primary dark:hover:text-primary-fixed-dim transition-colors duration-200 font-medium text-sm">Contact</a>
           </div>
 
           {/* Desktop actions */}
@@ -629,12 +630,6 @@ export default function App() {
                     {l.label}
                   </NavLink>
                 ))}
-                <a href="/#services" onClick={() => setIsMobileMenuOpen(false)} className="text-on-surface-variant dark:text-gray-300 hover:text-primary text-lg font-semibold flex items-center gap-2">
-                  <span className="material-symbols-outlined text-sm">construction</span>Services
-                </a>
-                <a href="/#contact-footer" onClick={() => setIsMobileMenuOpen(false)} className="text-on-surface-variant dark:text-gray-300 hover:text-primary text-lg font-semibold flex items-center gap-2">
-                  <span className="material-symbols-outlined text-sm">mail</span>Contact
-                </a>
                 <button
                   onClick={() => { setIsMobileMenuOpen(false); setIsQuoteModalOpen(true) }}
                   className="w-full bg-primary text-on-primary dark:bg-primary-fixed-dim dark:text-on-primary-fixed py-3 rounded-xl font-bold hover:opacity-90 transition-all duration-300 shadow-md flex items-center justify-center gap-2"
@@ -670,6 +665,8 @@ export default function App() {
           }
         />
         <Route path="/about" element={<About />} />
+        <Route path="/services" element={<Services />} />
+        <Route path="/contact" element={<Contact />} />
       </Routes>
 
       {/* ── Footer ─────────────────────────────────────────────────────────── */}
@@ -691,9 +688,9 @@ export default function App() {
             <ul className="space-y-2.5">
               {SERVICES.map(s => (
                 <li key={s.title}>
-                  <a href="/#services" className="font-body-md text-sm text-on-surface-variant dark:text-gray-400 hover:text-primary dark:hover:text-primary-fixed-dim transition-colors duration-200">
+                  <Link to="/services" className="font-body-md text-sm text-on-surface-variant dark:text-gray-400 hover:text-primary dark:hover:text-primary-fixed-dim transition-colors duration-200">
                     {s.title}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
